@@ -1,6 +1,5 @@
-// Experiment frame, with Matter canvas and surrounding buttons
+// Experiment frame, with P5 canvas
 // var config = require('./display_config.js');
-var Matter = require('./matter.js');
 var p5 = require('./p5.js');
 var Boundary = require('./boundary.js');
 var BlockMenu = require('./blockMenu.js');
@@ -15,8 +14,6 @@ class BlockUniverse {
   constructor() {
     this.scoring = false;
 
-    // Global Variables for Matter js and custom Matter js wrappers
-    this.engine = undefined;
     this.blocks = [];
     this.blockKinds = [];
     this.propertyList = [];
@@ -123,20 +120,23 @@ class BlockUniverse {
     // var targetBlocksDrawable = config.stimSilhouette ? targetBlocksSilhouette : targetBlocksColored;
 
     p5stim.draw = function () {
+
       p5stim.background(220);
       display.showStimulus(p5stim, targetBlocksDrawable, config.stimIndividualBlocks);
-      if (config.showStimFloor) {
+
+      if (config.showStimFloor) { // Floor
         display.showStimFloor(p5stim, config.stimFloorType, config.stimTickMark);
       };
-      if (config.showStimGrid) {
+
+      if (config.showStimGrid) { // Grid
         display.grid.show(p5stim);
       };
 
-      if (config.displayBuiltInStim) {
+      if (config.displayBuiltInStim) { // Reconstruction (from other participant)
         display.showReconstruction(p5stim, localThis.sendingBlocks, false);
       }
 
-      if (config.showStimMenu) {
+      if (config.showStimMenu) { // Menu
         localThis.blockMenu.show(p5stim, false);
       };
 
@@ -144,27 +144,12 @@ class BlockUniverse {
 
   };
 
-  setupEngine() {
-    // Set up Matter Physics Engine
-    this.engine = Matter.Engine.create({
-      enableSleeping: true,
-      velocityIterations: 24,
-      positionIterations: 12
-    });
-
-    this.engine.world = Matter.World.create({
-      gravity: {
-        y: 0
-      }
-    });
-  }
-
   setupBlockMenu() {
     // Create block kinds that will appear in environment &
     // menu. Later on this will need to be represented in each task.
     var c = 0;
     this.blockDims.forEach((dims, i) => {
-      this.blockKinds.push(new BlockKind(this.engine, dims[0], dims[1], config.buildColors[c], this.blockNames[i], config.internalStrokeColors[c]));
+      this.blockKinds.push(new BlockKind(dims[0], dims[1], config.buildColors[c], this.blockNames[i], config.internalStrokeColors[c]));
       c++;
     });
 
@@ -185,9 +170,7 @@ class BlockUniverse {
     this.rightSide = new Boundary(
       config.envCanvasWidth + 30, config.envCanvasHeight / 2, 60, config.envCanvasHeight
     );
-    Matter.World.add(this.engine.world, this.ground.body);
-    Matter.World.add(this.engine.world, this.leftSide.body);
-    Matter.World.add(this.engine.world, this.rightSide.body);
+
   }
 
   setupBuilding(env) {
@@ -204,28 +187,9 @@ class BlockUniverse {
       var envCanvas = env.createCanvas(config.envCanvasWidth, config.envCanvasHeight);
       envCanvas.parent('environment-canvas'); // add parent div 
 
-      this.setupEngine();
       //this.setupBlockMenu();
       this.setupBoundaries();
 
-      // Add things to the physics engine world
-
-      // Runner- use instead of line above if changes to game loop needed
-      Matter.Runner.run(Matter.Runner.create({
-        isFixed: true
-      }), this.engine);
-
-      // Set up interactions with physics objects
-      // TO DO: stop interactions with menu bar rect
-      //canvas.elt is the html element associated with the P5 canvas
-      var canvasMouse = Matter.Mouse.create(envCanvas.elt);
-
-      // Required for mouse's selected pixel to work on high-resolution displays
-      canvasMouse.pixelRatio = env.pixelDensity();
-
-      var options = {
-        mouse: canvasMouse // set object to mouse object in canvas
-      };
     }.bind(this);
 
     env.draw = function () { // Called continuously by Processing JS 
@@ -255,21 +219,6 @@ class BlockUniverse {
         );
       }
 
-      // // Make sure all blocks are snapped
-      // if (!this.postSnap && this.snapBodiesPostPlacement) {
-      //   this.sleeping = this.blocks.filter((block) => block.body.isSleeping);
-      //   this.allSleeping = this.sleeping.length == this.blocks.length;
-      //   if (this.allSleeping) {
-      //     this.blocks.forEach(block => {
-      //       block.snapBodyToGrid();
-      //     });
-      //     this.postSnap = true;
-      //     this.blocks.forEach(b => {
-      //       Matter.Sleeping.set(b, false);
-      //     });
-      //   }
-      // }
-
       if (this.revealTarget) {
         display.showStimulus(env, this.targetBlocks, false, config.revealedTargetColor);
       }
@@ -292,26 +241,13 @@ class BlockUniverse {
         if (env.mouseY > 0 && (env.mouseY < config.envCanvasHeight - config.menuHeight) &&
           (env.mouseX > 0 && env.mouseX < config.envCanvasWidth)) {
           if (this.isPlacingObject) {
-            // test whether all blocks are sleeping
-            this.sleeping = this.blocks.filter((block) => block.body.isSleeping);
-            this.allSleeping = this.sleeping.length == this.blocks.length;
 
             this.time_placing = Date.now();
 
-            if ((this.allSleeping || (this.time_placing - this.timeLastPlaced > 3000)) &&
-              ((env.mouseX > (config.sF * (this.selectedBlockKind.w / 2))) &&
+            if (((env.mouseX > (config.sF * (this.selectedBlockKind.w / 2))) &&
                 (env.mouseX < config.envCanvasWidth - (config.sF * (this.selectedBlockKind.w / 2))))) {
-              // SEND WORLD DATA AFTER PREVIOUS BLOCK HAS SETTLED
-              // Sends information about the state of the world prior to next block being placed
               this.placeBlock(env);
             }
-
-            // else {
-            //   this.disabledBlockPlacement = true;
-            //   // jsPsych.pluginAPI.setTimeout(function () { // change color of bonus back to white
-            //   //   disabledBlockPlacement = false;
-            //   // }, 100);
-            // }
           }
         }
 
@@ -386,19 +322,13 @@ class BlockUniverse {
         env.cursor();
         this.isPlacingObject = false;
       }
-      // this.blocks.forEach(b => {
-      //   Matter.Sleeping.set(b.body, false);
-      // });
 
       this.sendBlockData();
       this.checkTrialEnd();
 
 
     } else {
-      //this.disabledBlockPlacement = true;
-      // jsPsych.pluginAPI.setTimeout(function () { // change color of bonus back to white
-      //   disabledBlockPlacement = false;
-      // }, 100);
+
     }
 
 
@@ -411,8 +341,6 @@ class BlockUniverse {
 
     } else if (this.trialObj.endCondition == 'perfect-reconstruction') {
 
-      // console.log(this.discreteWorld);
-      // console.log(scoring.getDiscreteWorld(this.targetBlocks, config.discreteEnvWidth, config.discreteEnvHeight, false));
       if (_.isEqual(this.discreteWorld, scoring.getDiscreteWorld(this.trialObj.targetBlocks, config.discreteEnvWidth, config.discreteEnvHeight, false, 0))) {
         this.endBuilding();
       }
@@ -421,12 +349,6 @@ class BlockUniverse {
 
       // let offset = -(this.trialObj.offset)
       let stillFits = true;
-
-      // console.log(this.targetBlocks, 
-      //             config.discreteEnvWidth, 
-      //             config.discreteEnvHeight, 
-      //             false, 
-      //             offset);
 
       var offset = 0;
       while (offset < config.discreteEnvWidth && stillFits) {
