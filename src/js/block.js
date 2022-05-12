@@ -1,12 +1,10 @@
 // var config = require('./display_config.js');
 var Matter = require('./matter.js');
 
-// Wrappers for Matter Bodies that instantiate a particular BlockKind
 class Block {
-  constructor(engine, blockKind, x, y, rotated,
+  constructor(blockKind, x, y, rotated,
               testing_placement = false, x_index = null,  y_index = null) {
 
-    this.engine = engine;
     this.blockKind = blockKind;
     this.x_index = x_index;
     this.y_index = y_index;
@@ -36,24 +34,12 @@ class Block {
       this.originalX = x * config.worldScale;
       this.originalY = y * config.worldScale;
       
-      this.body = Matter.Bodies.rectangle(this.originalX, this.originalY,
-                                          this.w * config.worldScale,
-                                          this.h * config.worldScale, options);
-      //Matter.World.add(this.engine.world, this.body); // disabled for current version
     } else {
-      this.test_body = Matter.Bodies.rectangle(
-        x * config.worldScale, 
-        y * config.worldScale,
-        this.w * config.worldScale * 0.85,
-        this.h * config.worldScale * 0.85
-      );
-      this.test_body.collisionFilter.category = 3;
     }
   }
   
   // Display the block
   show (env) {
-    var angle = this.body.angle;
 
     let x_top_corner;
     let y_top_corner;
@@ -72,11 +58,7 @@ class Block {
     env.push(); //saves the current drawing style settings and transformations
     env.rectMode(env.CENTER);
     env.translate(x_top_corner, y_top_corner);
-    env.rotate(angle);
     env.fill(this.color);
-    // if(this.body.isSleeping) {
-    //     env.fill();
-    // }
 
     env.rect(0, 0, this.w, this.h);
 
@@ -112,11 +94,6 @@ class Block {
     }
     var snapped_location = Matter.Vector.create(snappedX * config.worldScale, snappedY * config.worldScale);
     Matter.Body.setPosition(this.body, snapped_location);
-  }
-
-  can_be_placed (engine) {
-    var colliding_bodies = Matter.Query.region(engine.world.bodies, this.test_body.bounds);
-    return (colliding_bodies === undefined || colliding_bodies.length == 0)
   }
 
   can_be_placed_discrete (discreteWorld) {
