@@ -18,6 +18,10 @@ class BlockUniverse {
     this.blockKinds = [];
     this.propertyList = [];
 
+    this.events = {
+        "blockActivated": [],
+    };
+
     // Block placement variables
     this.isPlacingObject = false;
     this.rotated = false;
@@ -51,6 +55,17 @@ class BlockUniverse {
 
     this.trialObj = {};
 
+  }
+
+  addEventListener(name, handler) {
+      this.events[name].push(handler);
+  }
+
+  removeEventListener(name, handler) {
+      if (!this.events.hasOwnProperty(name)) return;
+      const index = this.events[name].indexOf(handler);
+      if (index != -1)
+          this.events[name].splice(index, 1);
   }
 
   setupEnvs(trialObj, showStim, showBuild) {
@@ -223,6 +238,9 @@ class BlockUniverse {
     //ADD IF TO EVENT HANDLER, CHANGE TURNS ON BUTTON
 
     env.mouseClicked = function () {
+
+      const blocks = this.blocks.filter((block) => block.collided(env.mouseX, env.mouseY));
+      this.events["blockActivated"].forEach(f => blocks.forEach(block => f(block)));
 
       if (!this.disabledBlockPlacement) {
 

@@ -133,6 +133,11 @@ class Block {
     return this;
   }
 
+  collided(x, y) {
+    return (this.x - this.w/2 < x) && (x < this.x + this.w/2) &&
+           (this.y - this.h/2 < y) && (y < this.y + this.h/2);
+  }
+
 
 }
 
