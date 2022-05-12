@@ -165,6 +165,13 @@ class Block {
     return this;
   }
 
+  collided(x, y) {
+    console.log(x);
+    console.log(this.x - this.width/2 < x, this.x + this.width/2);
+    return (this.x - this.width/2 < x) && (x < this.x + this.width/2) &&
+           (this.y - this.height/2 < y) && (y < this.y + this.height/2);
+  }
+
 
 }
 

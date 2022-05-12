@@ -281,6 +281,11 @@ class BlockUniverse {
 
     env.mouseClicked = function () {
 
+      console.log("hi");
+
+      const blocks = this.blocks.filter((block) => block.collided(env.mouseX, env.mouseY));
+      console.log(blocks);
+
       if (!this.disabledBlockPlacement) {
 
         // if mouse in main environment
