@@ -5,8 +5,7 @@
   "private": true,
   "scripts": {
     "build": "webpack --mode production",
-    "watch": "webpack --watch --mode production",
-    "test": "webpack --mode production && python3 -m http.server 1232"
+    "test": "webpack --watch --mode production && python3 -m http.server 1232"
   },
   "repository": {
     "type": "git",
