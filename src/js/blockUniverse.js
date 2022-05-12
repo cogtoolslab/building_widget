@@ -42,16 +42,10 @@ class BlockUniverse {
     this.blockDims = config.blockDims;
     this.blockNames = config.blockNames;
 
-    // // Metavariables
-    // this.dbname = 'block_construction';
-    // this.colname = 'silhouette';
-
     this.sendingBlocks = [];
 
     // Scaling values
     display.grid.setup(); // initialize grid
-
-    // this.blockSender = undefined;
 
     this.blockMenu = this.setupBlockMenu();
 

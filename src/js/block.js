@@ -21,15 +21,6 @@ class Block {
         this.h = blockKind.h * config.sF;
     }
 
-    //var options = blockKind.options;
-
-    var options = {
-        friction: 0.9,
-        frictionStatic: 1.4,
-        density: 0.0035,
-        restitution: 0.0015,
-        sleepThreshold: 30
-    }
     if (!testing_placement) {
       this.originalX = x * config.worldScale;
       this.originalY = y * config.worldScale;
