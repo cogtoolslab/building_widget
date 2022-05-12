@@ -243,10 +243,20 @@ class BlockUniverse {
 
     //ADD IF TO EVENT HANDLER, CHANGE TURNS ON BUTTON
 
-    env.mouseClicked = function () {
+    env.mouseDragged = function () {
+      this.blocks
+          .filter((block) => block.collided(env.mouseX, env.mouseY))
+          .forEach(block => {
+            this.events["blockActivated"].forEach(f => f(block));
+          });
+    }.bind(this);
 
-      const blocks = this.blocks.filter((block) => block.collided(env.mouseX, env.mouseY));
-      this.events["blockActivated"].forEach(f => blocks.forEach(block => f(block)));
+    env.mouseClicked = function () {
+      this.blocks
+          .filter((block) => block.collided(env.mouseX, env.mouseY))
+          .forEach(block => {
+            this.events["blockActivated"].forEach(f => f(block));
+          });
 
       if (!this.disabledBlockPlacement) {
 
