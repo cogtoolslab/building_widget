@@ -13,7 +13,7 @@ window.onload = function() {
     var showStimulus = false;
     var showBuilding = true;
 
-    window.blockSetup(trial, showStimulus, showBuilding, callback = null, selectionMode = true);
+    window.blockSetup(trial, showStimulus, showBuilding, selectionMode = true);
 
     let bu = window.blockUniverse;
 

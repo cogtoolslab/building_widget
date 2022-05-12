@@ -7,6 +7,7 @@ var BlockKind = require('./blockKind.js');
 var Block = require('./block.js');
 var display = require('./displayStimuli.js');
 var scoring = require('./scoring.js');
+const { NoEmitOnErrorsPlugin } = require('webpack');
 var imagePath = '../img/';
 
 class BlockUniverse {
@@ -71,9 +72,7 @@ class BlockUniverse {
   setupEnvs(trialObj, showStim, showBuild, selectionMode = false) {
     var localThis = this;
     this.trialObj = trialObj;
-    console.log('sm', selectionMode);
     this.selectionMode = selectionMode;
-    console.log('t.sm', this.selectionMode);
 
     this.blocks = [];
 
@@ -202,8 +201,13 @@ class BlockUniverse {
       //this.setupBlockMenu();
       this.setupBoundaries();
 
+      if (this.selectionMode) {
+        // add blocks to canvas
 
-      console.log(this.selectionMode);
+        // disable block placement
+
+
+      };
 
     }.bind(this);
 
