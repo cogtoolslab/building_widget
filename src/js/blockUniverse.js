@@ -68,9 +68,12 @@ class BlockUniverse {
           this.events[name].splice(index, 1);
   }
 
-  setupEnvs(trialObj, showStim, showBuild) {
+  setupEnvs(trialObj, showStim, showBuild, selectionMode = false) {
     var localThis = this;
     this.trialObj = trialObj;
+    console.log('sm', selectionMode);
+    this.selectionMode = selectionMode;
+    console.log('t.sm', this.selectionMode);
 
     this.blocks = [];
 
@@ -198,6 +201,9 @@ class BlockUniverse {
 
       //this.setupBlockMenu();
       this.setupBoundaries();
+
+
+      console.log(this.selectionMode);
 
     }.bind(this);
 

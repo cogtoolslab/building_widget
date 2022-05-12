@@ -30,7 +30,7 @@ class Block {
   }
   
   // Display the block
-  show (env) {
+  show(env) {
 
     let x_top_corner;
     let y_top_corner;
@@ -50,7 +50,6 @@ class Block {
     env.rectMode(env.CENTER);
     env.translate(x_top_corner, y_top_corner);
     env.fill(this.color);
-
     env.rect(0, 0, this.w, this.h);
 
     if (config.chocolateBlocks) {
@@ -61,7 +60,6 @@ class Block {
     env.stroke(config.strokeColor);
     env.strokeWeight(3);
     env.rect(0, 0, this.w, this.h);
-
     env.pop();
 
   }
@@ -137,7 +135,6 @@ class Block {
     return (this.x - this.w/2 < x) && (x < this.x + this.w/2) &&
            (this.y - this.h/2 < y) && (y < this.y + this.h/2);
   }
-
 
 }
 
