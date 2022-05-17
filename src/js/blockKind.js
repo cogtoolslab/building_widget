@@ -112,7 +112,7 @@ class BlockKind {
 
     var [snappedX, snappedY, x_index, y_index] = this.snapToGrid(preciseMouseX, preciseMouseY, discreteWorld)
     // index is the location in discrete world (i.e. the whole grid)
-
+    console.log(snappedX, snappedY);
     return new Block(this, snappedX, snappedY, false,
       testing_placement = testing_placement, x_index = x_index, y_index = y_index);
   }

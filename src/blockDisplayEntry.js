@@ -14,7 +14,6 @@ window.blockSetup = function(trialObj, showStimulus, showBuilding, callback) {
   // if(_.has(blockUniverse, 'p5stim')){
   //   blockUniverse.removeStimWindow();
   // };
-
   window.blockUniverse.setupEnvs(trialObj, showStimulus, showBuilding, callback);
 
 };

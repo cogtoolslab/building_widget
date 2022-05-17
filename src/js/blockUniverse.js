@@ -68,7 +68,7 @@ class BlockUniverse {
           this.events[name].splice(index, 1);
   }
 
-  setupEnvs(trialObj, showStim, showBuild) {
+  setupEnvs(trialObj, showStim, showBuild, callback) {
     var localThis = this;
     this.trialObj = trialObj;
 
@@ -85,7 +85,9 @@ class BlockUniverse {
         localThis.setupBuilding(env);
       }, 'environment-canvas');
     };
-
+    if (callback !== undefined) {
+      callback();
+    }
   };
 
 
@@ -288,6 +290,41 @@ class BlockUniverse {
       }
     }.bind(this);
   };
+
+  addBlock(blockObj) {
+    const color = blockObj.color || [200, 200, 200, 255];
+    const strokeColor = blockObj.strokColor || [150, 150, 150, 255];
+    const selectedBlockKind = new BlockKind(
+      blockObj.width,
+      blockObj.height,
+      color,
+      "",
+      strokeColor);
+
+    const snappedX = config.stim_scale * blockObj.x;
+    const snappedY = config.stim_scale * blockObj.y;
+    const newBlock = selectedBlockKind.createSnappedBlock(
+      snappedX,
+      snappedY,
+      this.discreteWorld,
+      false
+    );
+    this.blocks.push(newBlock);
+
+    this.discreteWorldPrevious = _.cloneDeep(this.discreteWorld);
+
+    var blockTop = newBlock.y_index + selectedBlockKind.h;
+    var blockRight = newBlock.x_index + selectedBlockKind.w;
+
+    for (let y = newBlock.y_index; y < blockTop; y++) {
+      for (let x = newBlock.x_index; x < blockRight; x++) {
+        this.discreteWorld[x][y] = false;
+      }
+    }
+
+    this.postSnap = false;
+
+  }
 
   placeBlock(env) {
 

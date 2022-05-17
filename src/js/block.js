@@ -63,7 +63,6 @@ class Block {
     env.rect(0, 0, this.w, this.h);
 
     env.pop();
-
   }
 
   snapBodyToGrid () {
