@@ -68,9 +68,10 @@ class BlockUniverse {
           this.events[name].splice(index, 1);
   }
 
-  setupEnvs(trialObj, showStim, showBuild, callback) {
+  setupEnvs(trialObj, showStim, showBuild, selectionMode = false, callback) {
     var localThis = this;
     this.trialObj = trialObj;
+    this.selectionMode = selectionMode;
 
     this.blocks = [];
 
@@ -200,6 +201,14 @@ class BlockUniverse {
 
       //this.setupBlockMenu();
       this.setupBoundaries();
+
+      if (this.selectionMode) {
+        // add blocks to canvas
+
+        // disable block placement
+
+
+      };
 
     }.bind(this);
 
