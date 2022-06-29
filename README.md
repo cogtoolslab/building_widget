@@ -9,3 +9,6 @@ Build project into dist folder
 
 Build project into dist folder & watch for changes (auto update)
 `npm run watch`
+
+Run jest tests
+`npm run test`
