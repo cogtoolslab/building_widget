@@ -2,7 +2,7 @@
 var Block = require('./block.js');
 class BlockKind {
 
-  constructor(engine, w, h, blockColor, blockName = '', internalStrokeColor) {
+  constructor(w, h, blockColor, blockName = '', internalStrokeColor) {
     // BlockKinds are a type of block- of which several might be placed
     // in the environment. To be concretely instantiated, a Block must
     // be created that inherets its properties from a BlockKind
@@ -10,7 +10,6 @@ class BlockKind {
     // associated with that blockKind.  BlockKind width and height
     // should be given in small integers. They are scaled in the block
     // class.
-    this.engine = engine;
     this.x = undefined;
     this.y = undefined;
     this.w = w;
@@ -113,8 +112,7 @@ class BlockKind {
 
     var [snappedX, snappedY, x_index, y_index] = this.snapToGrid(preciseMouseX, preciseMouseY, discreteWorld)
     // index is the location in discrete world (i.e. the whole grid)
-
-    return new Block(this.engine, this, snappedX, snappedY, false,
+    return new Block(this, snappedX, snappedY, false,
       testing_placement = testing_placement, x_index = x_index, y_index = y_index);
   }
 

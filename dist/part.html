@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8"/>
+<!-- talks to browser and says information about webpage -->
+<!-- includes website title -->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+<!-- <script type="text/javascript" src="building_setup.js"></script> -->
+
+<!-- <link rel="stylesheet" href="building_widget.css"> -->
+<style>
+    .group.selected {
+        background-color: aqua;
+    }
+
+    .group {
+        background-color: grey;
+        cursor: pointer;
+    }
+</style>
+
+<title>Building Widget</title>
+
+</head>
+
+<body>
+<!-- "what should i display in webpage" -->
+    <div class = "widget-canvas" id = "building-canvas"></div>
+    <script src="blockConfig.js"></script>
+    <script src="blockDisplay.js"></script>
+
+    <script>
+        let groups = [];
+        let groupDivs = [];
+        let divs = [];
+        let colors = [];
+        let groupIdx = null;
+        function addgroup() {
+            const group = [];
+            const color = [Math.floor(Math.random()*255), Math.floor(Math.random()*255), Math.floor(Math.random()*255), 255];
+            colors.push(color);
+            groups.push(group);
+            const thisGrp = groups.length - 1;
+            groupIdx = thisGrp;
+
+            const groupDiv = document.createElement("div");
+            groupDiv.setAttribute("id", `group-${groupIdx}`);
+            groupDiv.setAttribute("class", "group selected");
+            groupDiv.innerText = group.length;
+            groupDiv.addEventListener("click", () => {
+                groupDivs.forEach((div, i) => {
+                    if (i == thisGrp)
+                        div.setAttribute("class", "group selected");
+                    else
+                        div.setAttribute("class", "group");
+                });
+                groupIdx = thisGrp;
+            });
+            groupDivs.forEach((div, i) => {
+                if (i == thisGrp)
+                    div.setAttribute("class", "group selected");
+                else
+                    div.setAttribute("class", "group");
+            });
+            groupDivs.push(groupDiv);
+            document.getElementById("groups").appendChild(groupDiv);
+        }
+
+        window.onload = function() {
+
+            let trial = {
+                stimulus : [
+                    { "x": 0, "y": 0, "width": 2, "height": 1 },
+                    { "x": 0, "y": 1, "width": 1, "height": 2 },
+                    { "x": 0, "y": 3, "width": 1, "height": 2 },
+                    { "x": 0, "y": 5, "width": 2, "height": 1 }],
+                endCondition: 'perfect-reconstruction-translation',
+                offset: 5,
+            };
+
+            var showStimulus = false;
+            var showBuilding = true;
+
+            function addBlocks() {
+                trial.stimulus.forEach(block => {
+                    block.x += 5;
+                    window.blockUniverse.addBlock(block);
+                });
+            }
+
+            window.blockSetup(
+                trial,
+                showStimulus,
+                showBuilding,
+                true,
+                addBlocks
+            );
+
+            window.blockUniverse.addEventListener("blockActivated", (block) => {
+                const color = colors[groupIdx];
+                block.color = color;
+                groups[groupIdx].push(block);
+                groupDivs[groupIdx].innerText = groups[groupIdx].length;
+            });
+
+            addgroup();
+        };
+
+    </script>
+
+
+    <div class="col text-center">
+        <div class="any-canvas" id="feedback"></div>
+        <div class="any-canvas" id="stimulus-canvas" style="display: inline-block"></div>
+        <div class="any-canvas" id="environment-canvas" style="display: inline-block"></div>
+        <button id="done-button" type="button" class="btn btn-primary">Done</button>
+    </div>
+    <div id="groups">
+    </div>
+    <button id="add-group" type="button" class="btn btn-primary" onclick="addgroup()">+group</button>
+</body>
+
+</html>
+
