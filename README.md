@@ -6,3 +6,6 @@ Install node packages:
 
 Build project into dist folder
 `npm run build`
+
+Build project into dist folder & watch for changes (auto update)
+`npm run watch`

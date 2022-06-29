@@ -221,7 +221,9 @@ class BlockUniverse {
       // display.showMarkers(env);
 
       // Menu & grid
-      this.blockMenu.show(env, this.disabledBlockPlacement);
+      if (config.showBuildingMenu) {
+        this.blockMenu.show(env, this.disabledBlockPlacement);
+      }
       display.grid.show(env);
 
       if (this.trialObj.condition == 'practice' && !this.scoring) {
