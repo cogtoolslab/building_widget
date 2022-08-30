@@ -220,7 +220,10 @@ class BlockUniverse {
       // display.showMarkers(env);
 
       // Menu & grid
-      if (config.showBuildingMenu) {
+      if (config.hideBuildingMenu) {
+        // do nothing
+      } else {
+        // shoe menu
         this.blockMenu.show(env, this.disabledBlockPlacement);
       }
       display.grid.show(env);
