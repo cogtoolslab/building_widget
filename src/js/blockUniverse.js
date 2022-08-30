@@ -94,7 +94,7 @@ class BlockUniverse {
 
     };
 
-    let targetBlocksDrawable = config.stimSilhouette ?
+    p5stim.targetBlocksDrawable = config.stimSilhouette ?
       this.targetBlocks.map(block => {
         block.color = config.silhouetteColor;
         block.internalStrokeColor = config.silhouetteColor;
@@ -124,7 +124,7 @@ class BlockUniverse {
 
     p5stim.draw = function () {
       p5stim.background(220);
-      display.showStimulus(p5stim, targetBlocksDrawable, config.stimIndividualBlocks);
+      display.showStimulus(p5stim, p5stim.targetBlocksDrawable, config.stimIndividualBlocks);
       if (config.showStimFloor) {
         display.showStimFloor(p5stim, config.stimFloorType, config.stimTickMark);
       };
