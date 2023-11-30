@@ -315,7 +315,7 @@ class BlockUniverse {
 
   feedback(){
 
-    let correct = checkPerfectTranslation();
+    let correct = this.checkPerfectTranslation();
 
     if (correct) {
 
