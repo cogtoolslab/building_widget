@@ -249,7 +249,7 @@ class BlockUniverse {
       }
 
       if (this.revealTarget) {
-        display.showStimulus(env, this.targetBlocks, false, config.revealedTargetColor);
+        display.showStimulus(env, this.targetBlocks, true, config.revealedTargetColor);
       }
 
     }.bind(this);
