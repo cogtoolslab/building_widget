@@ -73,6 +73,7 @@ class BlockUniverse {
     var localThis = this;
     this.trialObj = trialObj;
     this.selectionMode = selectionMode;
+    this.revealTarget = false;
 
     this.blocks = [];
 
@@ -253,7 +254,7 @@ class BlockUniverse {
       // }
 
       if (this.revealTarget) {
-        display.showStimulus(env, this.targetBlocks, false, config.revealedTargetColor);
+        display.showStimulus(env, this.targetBlocks, true, config.revealedTargetColor);
       }
 
     }.bind(this);
@@ -320,7 +321,7 @@ class BlockUniverse {
     if (correct) {
 
     } else {
-      display.showStimulus(this.p5env, this.targetBlocks, true, config.revealedTargetColor);
+      this.revealTarget = true;
     }
 
     return correct;
