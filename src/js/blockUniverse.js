@@ -248,11 +248,30 @@ class BlockUniverse {
         );
       }
 
+      // if (trialObj.feedback) {
+      //   giveFeedback();
+      // }
+
       if (this.revealTarget) {
-        display.showStimulus(env, this.targetBlocks, true, config.revealedTargetColor);
+        display.showStimulus(env, this.targetBlocks, false, config.revealedTargetColor);
       }
 
     }.bind(this);
+
+
+    function feedback() {
+
+      let correct = checkPerfectTranslation();
+
+      if (correct) {
+
+      } else {
+        display.showStimulus(env, this.targetBlocks, true, config.revealedTargetColor);
+      }
+
+      return correct;
+
+    };
 
 
     //ADD IF TO EVENT HANDLER, CHANGE TURNS ON BUTTON
@@ -419,18 +438,9 @@ class BlockUniverse {
 
     } else if (this.trialObj.endCondition == 'perfect-reconstruction-translation') {
 
-      // let offset = -(this.trialObj.offset)
-      let stillFits = true;
-
-      var offset = 0;
-      while (offset < config.discreteEnvWidth && stillFits) {
-        let targetWorld = scoring.getDiscreteWorld(this.trialObj.stimulus, config.discreteEnvWidth, config.discreteEnvHeight, false, offset);
-        stillFits = targetWorld ? true : false;
-        offset = offset + 1;
-        if (_.isEqual(this.discreteWorld, targetWorld)) {
-          this.endBuilding();
-        }
-      }
+      if (this.checkPerfectTranslation()){
+        this.endBuilding();
+      };
 
     } else if (this.trialObj.endCondition == 'max_blocks') {
       if (this.blocks.length == this.trialObj.maxBlocks) {
@@ -442,6 +452,20 @@ class BlockUniverse {
     }
 
   }
+
+  checkPerfectTranslation() {
+    let stillFits = true;
+
+      var offset = 0;
+      while (offset < config.discreteEnvWidth && stillFits) {
+        let targetWorld = scoring.getDiscreteWorld(this.trialObj.stimulus, config.discreteEnvWidth, config.discreteEnvHeight, false, offset);
+        stillFits = targetWorld ? true : false;
+        offset = offset + 1;
+        if (_.isEqual(this.discreteWorld, targetWorld)) {
+          return true;
+        }
+      }
+  };
 
   endBuilding() {
     console.log('end of trial');
