@@ -1,8 +1,8 @@
 // var config = require('./display_config.js');
 
-function showStimulus(env, stimulus, individual_blocks = true) {
+function showStimulus(env, stimulus, individual_blocks = true, blockColor = undefined) {
   Array.prototype.forEach.call(stimulus, block => {
-    showBlock(env, block, individual_blocks);
+    showBlock(env, block, individual_blocks, blockColor);
   });
 }
 
@@ -31,7 +31,7 @@ function drawStimChocolateBlocks(env, nRow, nCol) {
 }
 
 
-function showBlock(env, block, individual_blocks = false) {
+function showBlock(env, block, individual_blocks = false, blockColor = undefined) {
   const width = block.width;
   const height = block.height;
   const x_left = block.x - config.worldWidth / 2;
@@ -52,7 +52,7 @@ function showBlock(env, block, individual_blocks = false) {
     ((config.canvasHeight - config.floorHeight) - (config.stim_scale * y_center)));
 
   //draw fill
-  env.fill(block.color);
+  env.fill(blockColor ? blockColor : block.color);
   env.noStroke();
 
   // env.stroke(config.strokeColor);
