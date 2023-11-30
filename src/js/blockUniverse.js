@@ -41,13 +41,14 @@ class BlockUniverse {
 
     this.blockDims = config.blockDims;
     this.blockNames = config.blockNames;
+    this.buildColors = config.buildColors;
 
     this.sendingBlocks = [];
 
     // Scaling values
     display.grid.setup(); // initialize grid
 
-    this.blockMenu = this.setupBlockMenu();
+    this.blockMenu = null;
 
     this.revealTarget = false;
 
@@ -74,6 +75,8 @@ class BlockUniverse {
     this.selectionMode = selectionMode;
 
     this.blocks = [];
+
+    this.buildColors = trialObj.towerColor ? _.times(this.blockDims.length, _.constant(trialObj.towerColor)) : this.buildColors;
 
     if (showStim) {
       this.p5stim = new p5((env) => {
@@ -111,7 +114,7 @@ class BlockUniverse {
       }) :
       this.targetBlocks.map(block => {
         var colorIndex = this.getBlockColorIndex([block.width, block.height]);
-        block.color = config.buildColors[colorIndex];
+        block.color = this.buildColors[colorIndex];
         block.internalStrokeColor = config.internalStrokeColors[colorIndex];
         return block;
       });
@@ -158,10 +161,10 @@ class BlockUniverse {
   setupBlockMenu() {
     // Create block kinds that will appear in environment &
     // menu. Later on this will need to be represented in each task.
-    var c = 0;
+    // var c = 0;
     this.blockDims.forEach((dims, i) => {
-      this.blockKinds.push(new BlockKind(dims[0], dims[1], config.buildColors[c], this.blockNames[i], config.internalStrokeColors[c]));
-      c++;
+      this.blockKinds.push(new BlockKind(dims[0], dims[1], this.buildColors[i], this.blockNames[i], config.internalStrokeColors[i]));
+      // c++;
     });
 
     // Create Block Menu
@@ -185,6 +188,8 @@ class BlockUniverse {
   }
 
   setupBuilding(env) {
+
+    this.blockMenu = this.setupBlockMenu();
 
     // reset discrete world representation
     for (let i = 0; i < this.discreteWorld.length; i++) {
