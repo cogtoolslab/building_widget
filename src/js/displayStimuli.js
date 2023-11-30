@@ -60,7 +60,7 @@ function showBlock(env, block, individual_blocks = false, blockColor = undefined
 
   // draw internal squares
   if (individual_blocks) {
-    env.fill(block.color);
+    env.fill(blockColor ? blockColor : block.color);
     env.stroke(block.internalStrokeColor);
     drawStimChocolateBlocks(env, width, height);
     // env.stroke([240, 225, 0]);
