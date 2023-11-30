@@ -259,21 +259,6 @@ class BlockUniverse {
     }.bind(this);
 
 
-    function feedback() {
-
-      let correct = checkPerfectTranslation();
-
-      if (correct) {
-
-      } else {
-        display.showStimulus(env, this.targetBlocks, true, config.revealedTargetColor);
-      }
-
-      return correct;
-
-    };
-
-
     //ADD IF TO EVENT HANDLER, CHANGE TURNS ON BUTTON
 
     env.mouseDragged = function () {
@@ -326,6 +311,20 @@ class BlockUniverse {
         }
       }
     }.bind(this);
+  };
+
+  feedback(){
+
+    let correct = checkPerfectTranslation();
+
+    if (correct) {
+
+    } else {
+      display.showStimulus(this.p5env, this.targetBlocks, true, config.revealedTargetColor);
+    }
+
+    return correct;
+
   };
 
   addBlock(blockObj) {
