@@ -1,6 +1,6 @@
 // var config = require('./display_config.js');
 
-function showStimulus(env, stimulus, individual_blocks = false) {
+function showStimulus(env, stimulus, individual_blocks = true) {
   Array.prototype.forEach.call(stimulus, block => {
     showBlock(env, block, individual_blocks);
   });
