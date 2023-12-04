@@ -6,9 +6,9 @@ function showStimulus(env, stimulus, individual_blocks = true, blockColor = unde
   });
 }
 
-function showReconstruction(env, stimulus, individual_blocks = false) {
+function showReconstruction(env, stimulus, individual_blocks = false, blockColor = undefined) {
   Array.prototype.forEach.call(stimulus, block => {
-    showBlock(env, block, true, block.color);
+    showBlock(env, block, true, blockColor ? blockColor : block.color);
   });
 }
 

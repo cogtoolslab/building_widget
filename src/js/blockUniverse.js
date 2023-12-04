@@ -314,15 +314,25 @@ class BlockUniverse {
     }.bind(this);
   };
 
-  feedback(){
+  feedback(type){
 
     let correct = this.checkPerfectTranslation();
 
-    if (correct) {
+    if(type == 'side-by-side'){
 
-    } else {
-      this.revealTarget = true;
+      this.p5stim = new p5((env) => {
+        localThis.setupStimulus(env);
+      }, 'stimulus-canvas');
+      
     }
+    else {
+      if (correct) {
+
+      } else {
+        this.revealTarget = true;
+      }
+
+    };    
 
     return correct;
 
