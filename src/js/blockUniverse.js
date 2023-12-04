@@ -319,7 +319,8 @@ class BlockUniverse {
     let correct = this.checkPerfectTranslation();
 
     if(type == 'side-by-side'){
-
+      
+      var localThis = this;
       this.p5stim = new p5((env) => {
         localThis.setupStimulus(env);
       }, 'stimulus-canvas');
